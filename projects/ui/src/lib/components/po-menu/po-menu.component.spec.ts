@@ -108,11 +108,11 @@ describe('PoMenuComponent:', () => {
       { label: 'Level 1.2', icon: 'copy' }
     ];
 
-    fixture.detectChanges();
-
     fixture.ngZone.run(() => {
       router.initialNavigation();
     });
+
+    fixture.detectChanges();
   });
 
   it('should be created', () => {
@@ -344,8 +344,8 @@ describe('PoMenuComponent:', () => {
     fixture.ngZone.run(() => {
       router.navigate(['search']).then(() => {
         expect(location.path()).toBe('/search');
-        expect(component.activeMenuItem).toBe(component.menus[1].subItems[0]);
-        expect(component.groupedMenuItem).toBe(component.menus[1]);
+        expect(component.activeMenuItem).toEqual(component.menus[1].subItems[0]);
+        expect(component.groupedMenuItem).toEqual(component.menus[1]);
 
         done();
       });
@@ -1423,7 +1423,12 @@ describe('PoMenuComponent:', () => {
     });
 
     // TODO Ng V9
-    xit('checkingRouterChildrenFragments: should return the router url value if router contains a `.children[`primary`]` value', done => {
+    xit('checkingRouterChildrenFragments: should return undefined if router doens`t have a `.children[`primary`]` value', () => {
+      const routerFragment = component['checkingRouterChildrenFragments']();
+      expect(routerFragment).toEqual('');
+    });
+
+    it('checkingRouterChildrenFragments: should return the router url value if router contains a `.children[`primary`]` value', done => {
       fixture.ngZone.run(() => {
         router.navigate(['/search']).then(() => {
           const routerFragment = component['checkingRouterChildrenFragments']();
@@ -1431,12 +1436,6 @@ describe('PoMenuComponent:', () => {
           done();
         });
       });
-    });
-
-    // TODO Ng V9
-    xit('checkingRouterChildrenFragments: should return undefined if router doens`t have a `.children[`primary`]` value', () => {
-      const routerFragment = component['checkingRouterChildrenFragments']();
-      expect(routerFragment).toEqual('');
     });
 
     it('activateMenuByUrl: should call `activateMenuItem` and `getFormattedLink` if urlPath and menu.link have same value', done => {
